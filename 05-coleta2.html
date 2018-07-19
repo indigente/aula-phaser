@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Phaser</title>
+  <script src="phaser.min.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+config = {
+  width: 400,
+  height: 300,
+  scene: {preload, create, update},
+};
+game = new Phaser.Game(config);
+
+// Cria um gerador de números aleatórios
+gerador = new Phaser.Math.RandomDataGenerator();
+
+function preload() {
+  this.load.image("sky", "sky.png");
+  this.load.image("star", "star.png");
+  this.load.image("bomb", "bomb.png");
+}
+
+function create() {
+  this.add.image(400, 300, "sky");
+
+  // Agora a estrela começa em uma posição aleatória
+  estrela = this.add.image(
+    gerador.between(20, 380),
+    gerador.between(20, 280),
+    "star");
+
+  grupoBombas = this.add.group();
+
+  // As bombas também ficam em posições aleatórias
+  grupoBombas.create(
+    gerador.between(20, 380),
+    gerador.between(20, 280),
+    "bomb");
+  grupoBombas.create(
+    gerador.between(20, 380),
+    gerador.between(20, 280),
+    "bomb");
+  grupoBombas.create(
+    gerador.between(20, 380),
+    gerador.between(20, 280),
+    "bomb");
+  grupoBombas.create(
+    gerador.between(20, 380),
+    gerador.between(20, 280),
+    "bomb");  
+
+  // Vamos criar uma variável para guardar o número de bombas ativas
+  numBombasAtivas = 4;
+
+  // Cria o texto do score
+  score = this.add.text(5, 5, "Bombas: " + numBombasAtivas);
+
+  keys = this.input.keyboard.addKeys({
+    esquerda: Phaser.Input.Keyboard.KeyCodes.LEFT,
+    direita: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+    cima: Phaser.Input.Keyboard.KeyCodes.UP,
+    baixo: Phaser.Input.Keyboard.KeyCodes.DOWN,
+  });
+}
+
+function update() {
+  if (keys.direita.isDown) {
+    estrela.x += 3;
+  }
+  if (keys.esquerda.isDown) {
+    estrela.x -= 3;
+  }
+  if (keys.cima.isDown) {
+    estrela.y -= 3;
+  }
+  if (keys.baixo.isDown) {
+    estrela.y += 3;
+  }
+
+  grupoBombas.children.iterate(testaColisao);
+
+  // Se acabaram as bombas, reinicia a cena.
+  if (numBombasAtivas == 0) {
+    this.scene.restart();
+
+    // Alternativa: reinicia daqui a 500 milissegundos
+    // Note o uso de uma função anônima (sem nome)
+    // this.time.delayedCall(500, function () {
+    //   this.scene.restart();
+    // }, [], this);
+  }
+}
+
+function testaColisao(bomba) {
+  colidiu = Phaser.Geom.Intersects.RectangleToRectangle(estrela.getBounds(), bomba.getBounds());
+  if (bomba.active && colidiu) {
+    console.log("Coletou a bomba!");
+    bomba.active = false;
+    bomba.visible = false;
+    // Atualiza o contador de bombas
+    numBombasAtivas -= 1;
+    // Atualiza o texto do score
+    score.setText("Bombas: " + numBombasAtivas);
+  }
+}
+
+</script>
+
+</body>
+</html>

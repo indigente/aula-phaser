@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Phaser</title>
+  <script src="phaser.min.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+config = {
+  width: 400,
+  height: 300,
+  scene: {preload, create, update},
+  // Ativa o motor de física
+  physics: {
+    default: "arcade",
+  }
+};
+game = new Phaser.Game(config);
+
+function preload() {
+  this.load.image("sky", "sky.png");
+  this.load.image("star", "star.png");
+}
+
+function create() {
+  this.add.image(400, 300, "sky");
+  
+  // Cria uma imagem como um objeto físico.
+  // Objetos físicos possuem velocidade e estão
+  // sujeitos à ação de forças.
+  estrela = this.physics.add.image(20, 20, "star");
+  // estrela.body.setGravityY(300);
+
+  keys = this.input.keyboard.addKeys({
+    direita: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+    esquerda: Phaser.Input.Keyboard.KeyCodes.LEFT,
+    cima: Phaser.Input.Keyboard.KeyCodes.UP,
+    baixo: Phaser.Input.Keyboard.KeyCodes.DOWN
+  });
+}
+
+function update() {
+  vx = 0;
+  vy = 0;
+  if (keys.direita.isDown) {
+    vx += 150;
+  }
+  if (keys.esquerda.isDown) {
+    vx -= 150;
+  }
+  if (keys.cima.isDown) {
+    vy -= 150;
+  }
+  if (keys.baixo.isDown) {
+    vy += 150;
+  }
+  estrela.body.setVelocity(vx, vy);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Phaser</title>
+  <script src="phaser.min.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+// Aqui começa o código do jogo
+// Tudo o que vem depois de // até o final da linha é um comentário.
+// Comentários não são interpretados pelo navegador
+
+// Abaixo, criamos o objeto config, que possui três atributos:
+// width, height e scene.
+config = {
+  width: 400,
+  height: 300,
+  scene: {preload, create, update},
+};
+// Abaixo, criamos o objeto game, passando a configuração para ele.
+game = new Phaser.Game(config);
+
+// Um jogo no Phaser tem um ciclo de vida
+// definido pelas funções preload, create e
+// update.
+//
+// Ao abrir o jogo, executa-se preload (para
+// carregar recursos, como imagens e áudio),
+// então executa-se create (para realizar
+// qualquer configuração inicial, como posicionar
+// imagens na tela).
+// A partir daí, update é executado até 60 vezes
+// por segundo (a depender do desempenho do computador).
+// É aí que vem a lógica do jogo.
+
+// Abra este arquivo no navegador Google Chrome.
+// Tecle Ctrl+J (Windows/Linux) ou Cmd+Option+J (macOS)
+// para abrir o console do navegador, onde será possível
+// visualizar as mensagens escritas pelo seu programa.
+
+function preload() {
+  // Escreve uma mensagem no console do navegador.
+  // O que estiver entre aspas é escrito literalmente.
+  // O que não estiver é calculado antes de ser exibido.
+  console.log("preload");
+  console.log(9 + 3 * 4);
+  // Você pode escrever várias coisas separadas por vírgulas
+  console.log("teste", 1 + 2 + 3, "!!!");
+
+  // As linhas de código são executadas
+  // sequencialmente, de cima para baixo
+}
+
+function create() {
+}
+
+function update() {
+}
+
+// Exercícios:
+//
+// 1. Na linha 4, mude o texto depois de <title>. O que acontece?
+// 2. Como mudar o tamanho da tela do jogo para 640x480?
+// 3. Coloque instruções console.log dentro de create e de update,
+//    de forma a determinar quando essas funções são executadas.
+
+// Aqui termina o código do jogo, logo antes de </script>
+</script>
+
+</body>
+</html>

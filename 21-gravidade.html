@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Phaser</title>
+  <script src="phaser.min.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+config = {
+  width: 400,
+  height: 300,
+  scene: {preload, create, update},
+  // Ativa o motor de física
+  physics: {
+    default: "arcade",
+  }
+};
+game = new Phaser.Game(config);
+
+function preload() {
+  this.load.image("sky", "sky.png");
+  this.load.image("star", "star.png");
+}
+
+function create() {
+  this.add.image(400, 300, "sky");
+  
+  // Cria uma imagem como um objeto físico.
+  // Objetos físicos possuem velocidade e estão
+  // sujeitos à ação de forças.
+  estrela = this.physics.add.image(20, 20, "star");
+  // Determina que o objeto deve colidir com
+  // as laterais da tela.
+  estrela.setCollideWorldBounds(true);
+  // Define velocidade inicial (em pixels/s)
+  estrela.setVelocity(100, 0);
+  // Define gravidade no objeto (em pixels/s²)
+  estrela.setGravityY(300);
+  // Coeficiente de restituição
+  // (quanto da energia cinética do objeto
+  // se preservam após uma colisão, de 0.0 a 1.0).
+  estrela.setBounce(0.8);
+  // Desaceleração do objeto (em pixels/s²)
+  estrela.setDrag(5);
+}
+
+function update() {
+  // Não precisa fazer nada aqui.
+  // O motor de física se encarrega
+  // de atualizar a posição do objeto
+}
+</script>
+
+</body>
+</html>

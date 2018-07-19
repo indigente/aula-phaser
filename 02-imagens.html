@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Phaser</title>
+  <script src="phaser.min.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+config = {
+  width: 400,
+  height: 300,
+  scene: {preload, create, update},
+};
+game = new Phaser.Game(config);
+
+function preload() {
+  // Carrega as imagens.
+  // A imagem contida no arquivo "sky.png" ficará
+  // acessível pelo nome "sky".
+  this.load.image("sky", "sky.png");
+  this.load.image("star", "star.png");
+  // Aqui, o nome "this" se refere à cena atual.
+  // Cada cena representa uma parte do jogo;
+  // por exemplo, menu principal, créditos,
+  // configurações, o jogo em si...
+}
+
+function create() {
+  // As coordenadas da tela se iniciam no
+  // canto superior esquerdo (0, 0) e terminam
+  // no canto inferior direito -- neste exemplo,
+  // (400, 300)
+
+  // Adiciona imagem do céu ("sky") à cena atual
+  this.add.image(400, 300, "sky");
+  // Abaixo, guardamos a imagem na variável
+  // estrela pois queremos manipulá-la dentro
+  // da função update()
+  //
+  // O centro da estrela será posicionado
+  // na posição x = 40, y = 20.
+  //
+  estrela = this.add.image(40, 20, "star");
+}
+
+function update() {
+  // Estrela é um objeto do tipo imagem.
+  // Todo objeto possui atributos que podem
+  // ser acessados com um ponto (.)
+
+  // Acrescenta duas unidades ao valor de estrela.x
+  // A linha a seguir acrescenta duas unidades ao atributo x
+  // da variável estrela.
+  // O atributo x representa a distância em pixels para o lado esquerdo
+  // da tela
+  estrela.x += 2;
+  // Cuidado: dessa forma a velocidade da estrela
+  // depende do desempenho do computador!
+  // Em outro momento veremos como resolver esse problema.
+
+  // Alguns atributos de imagens:
+  // x: distância em pixels para o lado esquerdo da tela
+  // y: distância em pixels para o lado superior da tela
+  // alpha: opacidade, entre 0.0 e 1.0
+  // angle: ângulo, em graus
+  // displayWidth: largura da imagem
+  // displayHeight: altura da imagem
+  //
+  // Experimente escrever o valor desses atributos ou
+  // mesmo modificá-los!
+}
+
+// Exercícios:
+//
+// 1. Troque a ordem das linhas this.add.image, deixando a linha "estrela = ..."
+//    antes da linha "this.add..."sky")". O que acontece?
+// 2. Faça a estrela se mover mais rápido
+// 3. Faça a estrela ficar 50% transparente
+// 4. Faça a estrela girar
+// 5. Descubra a largura e altura da imagem da estrela
+// 6. Crie uma segunda estrela e faça-a se mover para baixo
+</script>
+
+</body>
+</html>

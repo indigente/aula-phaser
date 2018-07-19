@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Faz com que a tela do navegador possua 320 pixels lógicos -->
+  <!-- Abaixo, configuraremos a tela do jogo para 320 pixels -->
+  <meta name="viewport" content="width=320">
+  <!-- Remove a margem branca ao redor da tela do jogo -->
+  <style>body { margin: 0 } </style>
+  <title>Phaser</title>
+  <script src="phaser.min.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+config = {
+  width: 320,
+  height: 480,
+  scene: {preload, create, update},
+};
+game = new Phaser.Game(config);
+
+function preload() {
+  this.load.image("sky", "sky.png");
+  this.load.image("star", "star.png");
+}
+
+function create() {
+  this.add.image(400, 300, "sky");
+  estrela = this.add.image(20, 20, "star");
+}
+
+function update() {
+  if (this.input.activePointer.isDown) {
+    estrela.x = this.input.activePointer.x;
+    estrela.y = this.input.activePointer.y;
+  }
+}
+
+// Abra este exemplo no repl.it -- escolha a linguagem
+// HTML, CSS, JS ou acesse diretamente o endereço
+// https://repl.it/languages/html
+// Execute o jogo no repl.it e então abra no celular
+</script>
+
+</body>
+</html>

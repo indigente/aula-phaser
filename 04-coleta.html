@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Phaser</title>
+  <script src="phaser.min.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+config = {
+  width: 400,
+  height: 300,
+  scene: {preload, create, update},
+};
+game = new Phaser.Game(config);
+
+function preload() {
+  this.load.image("sky", "sky.png");
+  this.load.image("star", "star.png");
+  this.load.image("bomb", "bomb.png");
+}
+
+function create() {
+  this.add.image(400, 300, "sky");
+  estrela = this.add.image(20, 20, "star");
+
+  // Em alguns casos é útil agrupar objetos.
+  // Neste caso, vamos criar um grupo para
+  // abrigar todas as bombas e vamos adicionar
+  // esse grupo à cena.
+  grupoBombas = this.add.group();
+
+  // Agora vamos criar cópias da bomba
+  // dentro do grupo
+  grupoBombas.create(80, 80, "bomb");
+  grupoBombas.create(40, 120, "bomb");
+  grupoBombas.create(200, 250, "bomb");
+  grupoBombas.create(350, 200, "bomb");  
+
+  keys = this.input.keyboard.addKeys({
+    esquerda: Phaser.Input.Keyboard.KeyCodes.LEFT,
+    direita: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+    cima: Phaser.Input.Keyboard.KeyCodes.UP,
+    baixo: Phaser.Input.Keyboard.KeyCodes.DOWN,
+  });
+}
+
+function update() {
+  if (keys.direita.isDown) {
+    estrela.x += 3;
+  }
+  if (keys.esquerda.isDown) {
+    estrela.x -= 3;
+  }
+  if (keys.cima.isDown) {
+    estrela.y -= 3;
+  }
+  if (keys.baixo.isDown) {
+    estrela.y += 3;
+  }
+
+  // Vamos checar a colisão da estrela com cada uma das bombas.
+  // Para isso, vamos chamar a função testaColisao para cada
+  // um dos elementos que estão dentro de grupoBombas (denotado
+  // por grupoBombas.children).
+  grupoBombas.children.iterate(testaColisao);
+}
+
+function testaColisao(bomba) {
+  // Calcula a distância entre a estrela e a bomba, em pixels.
+  // Guarda o resultado na variável distancia.
+  distancia = Phaser.Math.Distance.Between(estrela.x, estrela.y, bomba.x, bomba.y);
+  // (OBS.: idealmente deve-se declarar distancia como variável local, mas
+  // vamos ignorar isso por enquanto)
+
+  // Checa se a bomba está ativa e se a distância é menor do que 15.
+  // O && (e) é usado para juntar duas condições, de forma que ambas devem ser verdadeiras.
+  // O || (ou) é usado para juntar duas condições, de forma que basta uma ser verdadeira.
+  if (bomba.active && distancia < 15) {
+    console.log("Coletou a bomba!");
+
+    // Desativa a bomba e torna-a invisível
+    bomba.active = false;
+    bomba.visible = false;
+  }
+
+  // Outra forma de detectar colisão:
+  // Phaser.Geom.Intersects.RectangleToRectangle(estrela.getBounds(), bomba.getBounds())
+}
+
+</script>
+
+</body>
+</html>

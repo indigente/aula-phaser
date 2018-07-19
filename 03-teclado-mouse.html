@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Phaser</title>
+  <script src="phaser.min.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+config = {
+  width: 400,
+  height: 300,
+  scene: {preload, create, update},
+};
+game = new Phaser.Game(config);
+
+function preload() {
+  this.load.image("sky", "sky.png");
+  this.load.image("star", "star.png");
+}
+
+function create() {
+  this.add.image(400, 300, "sky");
+  estrela = this.add.image(20, 20, "star");
+  // Teclas que vamos usar
+  // Cada tecla tem um KeyCode. Para ver a lista, acesse
+  // https://github.com/photonstorm/phaser/blob/master/src/input/keyboard/keys/KeyCodes.js
+  keys = this.input.keyboard.addKeys({
+    espaco: Phaser.Input.Keyboard.KeyCodes.SPACE,
+    esquerda: Phaser.Input.Keyboard.KeyCodes.LEFT,
+    direita: Phaser.Input.Keyboard.KeyCodes.RIGHT
+  });
+}
+
+function update() {
+  // Instrução "if" (em português, "se"):
+  // o código entre chaves {} só executado
+  // se a condição entre parênteses for verdadeira
+
+  // .isDown é verdadeiro somente se a tecla
+  // está pressionada
+  if (keys.direita.isDown) {
+    estrela.x += 5;
+  }
+  if (keys.esquerda.isDown) {
+    estrela.x -= 5;
+  }
+  // .JustDown é verdadeiro somente se a tecla
+  // acabou de ser pressionada
+  if (Phaser.Input.Keyboard.JustDown(keys.espaco)) {
+    estrela.y += 20;
+  }
+  // this.input.activePointer representa o botão
+  // esquerdo do mouse (desktop) ou um toque na tela (mobile)
+  //
+  // .x e .y representam a posição do mouse ou dedo
+  //
+  // Troque isDown por justDown e veja o que acontece
+  if (this.input.activePointer.isDown) {
+    estrela.x = this.input.activePointer.x;
+    estrela.y = this.input.activePointer.y;
+  }
+}
+
+// Exercícios:
+//
+// 1. Faça a estrela se movimentar em todas as direções
+//    com o teclado (usando também as setas para cima
+//    para baixo).
+// 2. Impeça a estrela de sair da tela ao movimentá-la
+//    com as teclas direcionais
+
+
+</script>
+
+</body>
+</html>

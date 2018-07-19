@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Phaser</title>
+  <script src="phaser.min.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+cena1 = {
+  key: 'um',
+  preload: preload,
+  create: create,
+  update: update
+};
+cena2 = {
+  key: 'dois',
+  preload: cena2preload,
+  create: cena2create,
+  update: cena2update
+};
+config = {
+  width: 400,
+  height: 300,
+  scene: [cena1, cena2],
+};
+game = new Phaser.Game(config);
+
+function preload() {
+  this.load.image("sky", "sky.png");
+  this.load.image("star", "star.png");
+}
+
+function create() {
+  this.add.image(400, 300, "sky");
+  this.add.image(20, 20, "star");
+}
+
+function update() {
+  if (this.input.activePointer.justDown) {
+    this.input.activePointer.justDown = false;
+    console.log('Trocando para a cena 2');
+    this.scene.start('dois');
+  }
+}
+
+function cena2preload() {
+}
+function cena2create() {
+  this.add.text(0, 0, 'Game over');
+}
+function cena2update() {
+  if (this.input.activePointer.justDown) {
+    this.input.activePointer.justDown = false;
+    console.log('Trocando para a cena 1');
+    this.scene.start('um');
+  }
+}
+</script>
+
+</body>
+</html>

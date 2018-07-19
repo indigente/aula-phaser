@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Faz com que a tela do navegador possua 320 pixels lógicos -->
+  <!-- Abaixo, configuraremos a tela do jogo para 320 pixels -->
+  <meta name="viewport" content="width=320">
+  <!-- Remove a margem branca ao redor da tela do jogo -->
+  <style>body { margin: 0 } </style>
+  <title>Phaser</title>
+  <script src="phaser.min.js"></script>
+</head>
+<body>
+
+<script type="text/javascript">
+config = {
+  width: 320,
+  height: 480,
+  scene: {preload, create, update},
+};
+game = new Phaser.Game(config);
+gerador = new Phaser.Math.RandomDataGenerator();
+tempoParaAcelerar = 8000;
+
+function preload() {
+  this.load.image("asfalto", "roadasphalt.jpg");
+  this.load.image("jogador", "car-truck2.png");
+  this.load.image("carro", "car-truck4.png");
+}
+
+function create() {
+  distancia = 0;
+  asfalto = this.add.image(160, 300, "asfalto");
+  jogador = this.add.image(160, 380, "jogador");
+  velocidadeCarro = 4;
+
+  this.time.delayedCall(tempoParaAcelerar, aceleraCarros, [], this);
+
+  grupoCarros = this.add.group();
+  grupoCarros.create(
+    25 + Math.random() * (320 - 50),
+    50 + Math.random() * 100,
+    "carro");
+  grupoCarros.create(
+    25 + Math.random() * (320 - 50),
+    50 + Math.random() * 100,
+    "carro");
+  grupoCarros.create(
+    25 + Math.random() * (320 - 50),
+    50 + Math.random() * 100,
+    "carro");
+
+  score = this.add.text(5, 5, "Score");
+
+  keys = this.input.keyboard.addKeys({
+    esquerda: Phaser.Input.Keyboard.KeyCodes.LEFT,
+    direita: Phaser.Input.Keyboard.KeyCodes.RIGHT
+  });
+}
+
+function aceleraCarros() {
+  if (velocidadeCarro < 12) {
+    velocidadeCarro += 1;
+    this.time.delayedCall(tempoParaAcelerar, aceleraCarros, [], this);
+  }
+}
+
+function update() {
+  // moveJogador
+  if (keys.esquerda.isDown) {
+    jogador.x -= 5;
+  }
+  if (keys.direita.isDown) {
+    jogador.x += 5;
+  }
+  if (this.input.activePointer.isDown) {
+    jogador.x = this.input.activePointer.x;
+  }
+  if (jogador.x < 25) {
+    jogador.x = 25;
+  }
+  if (jogador.x > 320 - 25) {
+    jogador.x = 320 - 25;
+  }
+
+  // moveAsfalto
+  asfalto.y += 16 + velocidadeCarro;
+  if (asfalto.y >= 320) {
+    asfalto.y -= 160;
+  }
+
+  // moveCarros
+  grupoCarros.children.iterate(moveCarro);
+
+  // checaColisao
+  grupoCarros.children.iterate(checaColisao.bind(this));
+
+  // atualiza distância
+  distancia += 16 + velocidadeCarro;
+
+  // atualiza score
+  score.setText("Score: " + Math.floor(distancia / 60) + " m");
+}
+
+function checaColisao(carro) {
+  colidiu = Phaser.Geom.Intersects.RectangleToRectangle(jogador.getBounds(), carro.getBounds());
+  
+  if (colidiu && jogador.visible) {
+    console.log("game over");
+    jogador.visible = false;
+    this.time.delayedCall(1000, reiniciaJogo.bind(this), [], this);
+  }
+}
+
+function reiniciaJogo() {
+  jogador.visible = true;
+  this.scene.restart();
+}
+
+function moveCarro(carro) {
+  carro.y += velocidadeCarro;
+
+  if (carro.y - carro.displayHeight / 2 > 480) {
+    carro.y = -carro.displayHeight - Math.random() * 200;
+    carro.x = 25 + Math.random() * (320 - 50);
+  }
+}
+
+// Abra este exemplo no repl.it -- escolha a linguagem
+// HTML, CSS, JS ou acesse diretamente o endereço
+// https://repl.it/languages/html
+// Execute o jogo no repl.it e então abra no celular
+</script>
+
+</body>
+</html>
